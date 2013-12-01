@@ -17,4 +17,6 @@ The plugin includes the following functions:
 
 `{exp:typogrify:widont}` - Insert a non-breaking space entity between the two last words in every paragraph.	A paragraph in this context means either an actual paragraph element, a heading element or a list element.	This will avoid what typographers refer to as "widows"—a single word on its own line at the end of a paragraph.
 
-`{exp:typogrify}` - A shortcut to apply all the functions in the plugin.
+`{exp:typogrify}` - A shortcut to apply all the functions in the plugin. To selectively remove a given function, set the function name equal to "n":
+
+	{exp:typogrify widont="n"}

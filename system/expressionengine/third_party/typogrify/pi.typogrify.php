@@ -12,7 +12,7 @@
 
 $plugin_info = array(
   'pi_name'			=> 'Typogrify',
-  'pi_version'		=> '1.0',
+  'pi_version'		=> '1.1',
   'pi_author'		=> 'Jens Bjerrehuus (EE2 port by Aaron Gustafson)',
   'pi_author_url'	=> 'http://bjerrehuus.dk/blog/jens/',
   'pi_description'	=> 'Applies some classes and entities to improve the typography on your site.',
@@ -23,18 +23,48 @@ class Typogrify {
 
 	var $return_data = '';	  
 	
-	function Typogrify( $str='' )
+	function Typogrify( $str='', $smartypants="y", $amp="y", $caps="y", $final_quote="y", $initial_quote="y", $widont="y" )
 	{
 		$this->EE =& get_instance();
 		
 		if ( $str=='' ) $str = $this->EE->TMPL->tagdata;
 
-		$str = $this->smartypants($str);
-		$str = $this->amp($str);
-		$str = $this->caps($str);
-		$str = $this->final_quote($str);
+		$smartypants = $this->EE->TMPL->fetch_param( 'smartypants', $smartypants );
+		if ( $smartypants=="y" )
+		{
+			$str = $this->smartypants($str);
+		}
+		
+		$amp = $this->EE->TMPL->fetch_param( 'amp', $amp );
+		if ( $amp=="y" )
+		{
+			$str = $this->amp($str);
+		}
+		
+		$caps = $this->EE->TMPL->fetch_param( 'caps', $caps );
+		if ( $caps=="y" )
+		{
+			$str = $this->caps($str);
+		}
+		
+		$final_quote = $this->EE->TMPL->fetch_param( 'final_quote', $final_quote );
+		if ( $final_quote=="y" )
+		{
+			$str = $this->final_quote($str);
+		}
+		
+		$initial_quote = $this->EE->TMPL->fetch_param( 'initial_quote', $initial_quote );
+		if ( $initial_quote=="y" )
+		{
 		$str = $this->initial_quote($str);
-		$str = $this->widont($str);
+		}
+		
+		$widont = $this->EE->TMPL->fetch_param( 'widont', $widont );
+		if ( $widont=="y" )
+		{
+			$str = $this->widont($str);
+		}
+		
 		$this->return_data = $str;
 		
 		return $this->return_data;
@@ -154,7 +184,8 @@ The plugin includes the following functions:
 
 {exp:typogrify:widont} - Insert a non-breaking space entity between the two last words in every paragraph.	A paragraph in this context means either an actual paragraph element, a heading element or a list element.	This will avoid what typographers refer to as "widows"—a single word on its own line at the end of a paragraph.
 
-{exp:typogrify} - A shortcut to apply all the functions in the plugin.
+{exp:typogrify} - A shortcut to apply all the functions in the plugin. To selectively remove a given function, set the function name equal to "n": {exp:typogrify widont="n"}
+
 
 <?php	$buffer = ob_get_contents();
 		ob_end_clean(); 
